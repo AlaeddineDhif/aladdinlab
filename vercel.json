@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd aladdins-lab-frontend && npm run build",
+  "outputDirectory": "aladdins-lab-frontend/dist/browser",
+  "framework": "angular"
+}
