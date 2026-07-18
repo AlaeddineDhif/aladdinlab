@@ -1,0 +1,30 @@
+# ── Node / Angular ──
+node_modules/
+dist/
+tmp/
+.vite/
+.angular/
+
+# ── Java / Spring Boot ──
+target/
+*.class
+*.jar
+*.war
+*.log
+*.iml
+.idea/
+.mvn/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

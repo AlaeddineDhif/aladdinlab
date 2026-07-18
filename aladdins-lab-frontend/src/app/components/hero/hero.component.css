@@ -1,0 +1,57 @@
+.hero { padding:clamp(64px,10vw,100px) 0 clamp(48px,6vw,72px); min-height:85vh; display:flex; align-items:center; }
+
+.theme-toggle {
+  position:fixed; top:20px; right:28px; z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  width:38px; height:38px;
+  border:1px solid var(--border); border-radius:50%;
+  background:var(--surface); color:var(--text-secondary);
+  cursor:pointer; transition:all var(--transition); box-shadow:var(--shadow);
+}
+.theme-toggle:hover { color:var(--text); border-color:var(--accent); box-shadow:0 0 20px var(--accent-glow); }
+
+.hero-grid { display:grid; grid-template-columns:1.3fr 0.7fr; gap:64px; align-items:center; }
+.hero-left { display:flex; flex-direction:column; align-items:flex-start; }
+.hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:clamp(.68rem,1vw,.78rem); font-weight:600;
+  color:var(--accent); background:var(--accent-glow);
+  border:1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  padding:6px 14px; border-radius:20px;
+  letter-spacing:.04em; text-transform:uppercase;
+  margin-bottom:clamp(20px,2.5vw,28px);
+}
+.hero-badge-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+.hero-title { font-size:clamp(2.2rem,5vw,3.8rem); font-weight:800; line-height:1.08; letter-spacing:-.035em; color:var(--text); }
+.hero-title-accent { background:linear-gradient(135deg,var(--accent),#818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero-subtitle { margin-top:clamp(16px,2vw,24px); font-size:clamp(.85rem,1.15vw,1rem); font-weight:500; color:var(--text-secondary); line-height:1.6; }
+.hero-text { margin-top:clamp(20px,2.5vw,28px); font-size:clamp(.88rem,1.05vw,.95rem); line-height:1.85; color:var(--text-secondary); max-width:520px; }
+
+.portals { width:100%; margin-top:64px; border-top:1px solid var(--border); padding-top:40px; }
+.portals-label { font-size:clamp(.65rem,.85vw,.75rem); font-weight:700; text-transform:uppercase; letter-spacing:.22em; color:var(--text-secondary); opacity:.4; margin:0 0 28px; text-align:center; }
+.portals-cards { display:flex; flex-direction:row; justify-content:center; gap:24px; width:100%; }
+
+.portal-card {
+  flex:1; max-width:310px; display:flex; flex-direction:column; align-items:flex-start; gap:14px;
+  padding:24px; border-radius:var(--radius-sm); border:1px solid var(--border);
+  background:var(--surface); color:inherit;
+  transition:all var(--transition);
+}
+.portal-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--accent); }
+.portal-card-icon { display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:var(--surface-alt); color:var(--accent); }
+.portal-card--enterprise .portal-card-icon,.portal-card--enterprise .portal-card-tag { color:var(--gold); }
+.portal-card-body { display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
+.portal-card-tag { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--accent); }
+.portal-card-title { font-size:1rem; font-weight:700; color:var(--text); line-height:1.35; }
+.portal-card-desc { font-size:.78rem; color:var(--text-secondary); line-height:1.6; }
+.portal-card-arrow { align-self:flex-end; color:var(--text-secondary); opacity:.25; transition:all var(--transition); margin-top:auto; }
+.portal-card:hover .portal-card-arrow { opacity:.6; transform:translateX(4px); }
+
+.hero-right { display:flex; justify-content:center; align-items:center; }
+.hero-visual { width:100%; height:440px; border-radius:var(--radius); background:var(--surface-alt); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; color:var(--text-secondary); }
+.hero-visual svg { opacity:.35; }
+.hero-visual-label { font-size:.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.15em; opacity:.35; }
+
+@media (max-width:860px) { .hero-grid { grid-template-columns:1fr; gap:0; } .hero-right { display:none; } .hero-text { max-width:none; } }
+@media (max-width:540px) { .portals-cards { flex-direction:column; align-items:center; } .portal-card { max-width:400px; width:100%; } }

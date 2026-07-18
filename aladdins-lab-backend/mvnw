@@ -1,0 +1,8 @@
+#!/bin/sh
+# ---------------------------------------------------------------------------
+# Maven Wrapper — Portable Apache Maven 3.9.6 (no global install needed)
+# ---------------------------------------------------------------------------
+
+MAVEN_HOME="$(cd "$(dirname "$0")" && pwd)/.mvn/wrapper/distribution"
+MAVEN_CMD="$MAVEN_HOME/bin/mvn"
+exec "$MAVEN_CMD" "$@"
