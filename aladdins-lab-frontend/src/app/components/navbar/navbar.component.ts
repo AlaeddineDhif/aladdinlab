@@ -16,6 +16,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         <nav class="nav-links">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Home</a>
           <a routerLink="/work-with-me" routerLinkActive="active" class="nav-link">Work With Me</a>
+          <a routerLink="/3d-printing" routerLinkActive="active" class="nav-link">3d Printing</a>
+          <a routerLink="/esp32-projects" routerLinkActive="active" class="nav-link">ESP32 Projects</a>
         </nav>
       </div>
     </header>
