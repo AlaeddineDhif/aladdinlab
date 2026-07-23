@@ -38,39 +38,39 @@
       </p>
 
       <div class="portals">
-        <h2 class="portals-label">Choose Your Orbit</h2>
-        <div class="portals-cards">
-          <div class="portal-card portal-card--community">
-            <div class="portal-card-icon">
-              <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.2" opacity=".3"/>
-                <path d="M20 16v16l14-8-14-8z" fill="currentColor"/>
-              </svg>
+        @if (currentUser()) {
+          <div class="welcome-card">
+            <div class="welcome-card-top">
+              <div class="welcome-card-avatar">
+                <img [src]="avatarUrl()" alt="" class="welcome-avatar-img" />
+                <span class="welcome-avatar-ring"></span>
+              </div>
+              <div class="welcome-card-header">
+                <h3 class="welcome-card-title">Welcome to Aladdin's Lab Community, {{ displayName() }}!</h3>
+                <span class="welcome-card-badge">Verified Lab Member</span>
+              </div>
             </div>
-            <div class="portal-card-body">
-              <span class="portal-card-tag">Community</span>
-              <h3 class="portal-card-title">The Maker Corner</h3>
-              <p class="portal-card-desc">Open-source schematics, firmware, 3D printing tutorials, and a network of 2,000+ builders.</p>
+            <div class="welcome-card-actions">
+              <button class="welcome-card-btn welcome-card-btn--primary">Explore Dashboard / Projects</button>
+              <button class="welcome-card-btn welcome-card-btn--secondary" (click)="openEditProfile()">Edit Profile</button>
             </div>
-            <div class="auth-buttons-group">
-              @if (user()) {
-                <div class="welcome-card">
-                  <div class="welcome-card-top">
-                    <div class="welcome-card-avatar">
-                      <img [src]="avatarUrl()" alt="" class="welcome-avatar-img" />
-                      <span class="welcome-avatar-ring"></span>
-                    </div>
-                    <div class="welcome-card-header">
-                      <h3 class="welcome-card-title">Welcome to Aladdin's Lab Community, {{ displayName() }}!</h3>
-                      <span class="welcome-card-badge">Verified Lab Member</span>
-                    </div>
-                  </div>
-                  <div class="welcome-card-actions">
-                    <button class="welcome-card-btn welcome-card-btn--primary">Explore Dashboard / Projects</button>
-                    <button class="welcome-card-btn welcome-card-btn--secondary" (click)="openEditProfile()">Edit Profile</button>
-                  </div>
-                </div>
-              } @else {
+          </div>
+        } @else {
+          <h2 class="portals-label">Choose Your Orbit</h2>
+          <div class="portals-cards">
+            <div class="portal-card portal-card--community">
+              <div class="portal-card-icon">
+                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.2" opacity=".3"/>
+                  <path d="M20 16v16l14-8-14-8z" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="portal-card-body">
+                <span class="portal-card-tag">Community</span>
+                <h3 class="portal-card-title">The Maker Corner</h3>
+                <p class="portal-card-desc">Open-source schematics, firmware, 3D printing tutorials, and a network of 2,000+ builders.</p>
+              </div>
+              <div class="auth-buttons-group">
                 <button class="auth-btn auth-btn--google" (click)="loginWithGoogle()" [disabled]="authLoading()">
                   <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
                     <path d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" fill="currentColor"/>
@@ -80,30 +80,28 @@
                   </svg>
                   Join Community with Google
                 </button>
-              }
+              </div>
             </div>
-          </div>
 
-          <div class="portal-card portal-card--enterprise">
-            <div class="portal-card-icon">
-              <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                <rect x="10" y="10" width="28" height="28" rx="4" stroke="currentColor" stroke-width="1.2"/>
-                <path d="M18 30v4a2 2 0 0 1-2 2h-2M30 30v4a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
-                <rect x="20" y="16" width="8" height="2" rx="1" fill="currentColor" opacity=".4"/>
-                <rect x="20" y="20" width="8" height="2" rx="1" fill="currentColor" opacity=".4"/>
-                <rect x="20" y="24" width="5" height="2" rx="1" fill="currentColor" opacity=".4"/>
-              </svg>
-            </div>
-            <div class="portal-card-body">
-              <span class="portal-card-tag">Business</span>
-              <h3 class="portal-card-title">Enterprise Solutions &amp; R&amp;D</h3>
-              <p class="portal-card-desc">Rapid prototyping, embedded systems (IoT/ESP32/STM32), and mechanical automation.</p>
-            </div>
-            @if (!user()) {
+            <div class="portal-card portal-card--enterprise">
+              <div class="portal-card-icon">
+                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                  <rect x="10" y="10" width="28" height="28" rx="4" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M18 30v4a2 2 0 0 1-2 2h-2M30 30v4a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                  <rect x="20" y="16" width="8" height="2" rx="1" fill="currentColor" opacity=".4"/>
+                  <rect x="20" y="20" width="8" height="2" rx="1" fill="currentColor" opacity=".4"/>
+                  <rect x="20" y="24" width="5" height="2" rx="1" fill="currentColor" opacity=".4"/>
+                </svg>
+              </div>
+              <div class="portal-card-body">
+                <span class="portal-card-tag">Business</span>
+                <h3 class="portal-card-title">Enterprise Solutions &amp; R&amp;D</h3>
+                <p class="portal-card-desc">Rapid prototyping, embedded systems (IoT/ESP32/STM32), and mechanical automation.</p>
+              </div>
               <button class="cta-btn">Request Consultation</button>
-            }
+            </div>
           </div>
-        </div>
+        }
       </div>
     </div>
 

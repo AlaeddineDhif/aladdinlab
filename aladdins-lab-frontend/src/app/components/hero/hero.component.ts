@@ -15,13 +15,13 @@ export class HeroComponent {
   isDark = signal(document.body.classList.contains('dark-theme'));
   authLoading = signal(false);
 
-  user = computed(() => this.supabase.currentUser());
+  currentUser = computed(() => this.supabase.currentUser());
   profile = computed(() => this.supabase.profile());
 
   displayName = computed(() => {
     const p = this.profile();
     if (p?.full_name) return p.full_name;
-    const u = this.user();
+    const u = this.currentUser();
     return u?.user_metadata?.['full_name'] ?? u?.user_metadata?.['name'] ?? u?.email ?? 'Member';
   });
 
