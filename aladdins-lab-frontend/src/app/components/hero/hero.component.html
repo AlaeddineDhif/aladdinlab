@@ -54,19 +54,21 @@
             </div>
             <div class="auth-buttons-group">
               @if (user()) {
-                <div class="welcome-badge">
-                  <div class="welcome-badge-avatar">
-                    @if (user()?.user_metadata?.['picture']; as pic) {
-                      <img [src]="pic" alt="" class="welcome-avatar-img" />
-                    } @else {
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    }
+                <div class="welcome-card">
+                  <div class="welcome-card-top">
+                    <div class="welcome-card-avatar">
+                      <img [src]="avatarUrl()" alt="" class="welcome-avatar-img" />
+                      <span class="welcome-avatar-ring"></span>
+                    </div>
+                    <div class="welcome-card-header">
+                      <h3 class="welcome-card-title">Welcome to Aladdin's Lab Community, {{ displayName() }}!</h3>
+                      <span class="welcome-card-badge">Verified Lab Member</span>
+                    </div>
                   </div>
-                  <div class="welcome-badge-text">
-                    <span class="welcome-badge-greeting">Welcome to the Community</span>
-                    <span class="welcome-badge-name">{{ displayName() }}</span>
+                  <div class="welcome-card-actions">
+                    <button class="welcome-card-btn welcome-card-btn--primary">Explore Dashboard / Projects</button>
+                    <button class="welcome-card-btn welcome-card-btn--secondary" (click)="openEditProfile()">Edit Profile</button>
                   </div>
-                  <button class="welcome-badge-btn" (click)="openEditProfile()">My Profile</button>
                 </div>
               } @else {
                 <button class="auth-btn auth-btn--google" (click)="loginWithGoogle()" [disabled]="authLoading()">

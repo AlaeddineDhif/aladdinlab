@@ -25,6 +25,12 @@ export class HeroComponent {
     return u?.user_metadata?.['full_name'] ?? u?.user_metadata?.['name'] ?? u?.email ?? 'Member';
   });
 
+  avatarUrl = computed(() => {
+    return this.supabase.profile()?.avatar_url
+      ?? this.supabase.currentUser()?.user_metadata?.['picture']
+      ?? '';
+  });
+
   toggleTheme(): void {
     this.isDark.update(v => !v);
     document.body.classList.toggle('dark-theme');
