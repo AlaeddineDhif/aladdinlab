@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, computed } from '@angular/core';
 import { SupabaseService } from '../../services/supabase.service';
 
 @Component({
@@ -9,10 +9,21 @@ import { SupabaseService } from '../../services/supabase.service';
   styleUrls: ['./hero.component.css']
 })
 export class HeroComponent {
-  private supabase = inject(SupabaseService);
+  private supabaseService = inject(SupabaseService);
+  protected supabase = this.supabaseService;
 
   isDark = signal(document.body.classList.contains('dark-theme'));
   authLoading = signal(false);
+
+  user = computed(() => this.supabase.currentUser());
+  profile = computed(() => this.supabase.profile());
+
+  displayName = computed(() => {
+    const p = this.profile();
+    if (p?.full_name) return p.full_name;
+    const u = this.user();
+    return u?.user_metadata?.['full_name'] ?? u?.user_metadata?.['name'] ?? u?.email ?? 'Member';
+  });
 
   toggleTheme(): void {
     this.isDark.update(v => !v);
@@ -23,5 +34,9 @@ export class HeroComponent {
     this.authLoading.set(true);
     await this.supabase.signInWithGoogle();
     this.authLoading.set(false);
+  }
+
+  openEditProfile(): void {
+    this.supabase.showEditProfile.set(true);
   }
 }

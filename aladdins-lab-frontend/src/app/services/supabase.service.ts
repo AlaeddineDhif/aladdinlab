@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 
@@ -16,6 +16,10 @@ export interface Profile {
 export class SupabaseService {
   private supabase: SupabaseClient;
 
+  currentUser = signal<User | null>(null);
+  profile = signal<Profile | null>(null);
+  showEditProfile = signal(false);
+
   constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseAnonKey, {
       auth: {
@@ -23,6 +27,19 @@ export class SupabaseService {
         persistSession: true,
         detectSessionInUrl: true,
       },
+    });
+
+    this.supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+        const user = session?.user ?? null;
+        this.currentUser.set(user);
+        if (user) {
+          this.handleAuthCallback();
+        }
+      } else if (event === 'SIGNED_OUT') {
+        this.currentUser.set(null);
+        this.profile.set(null);
+      }
     });
   }
 
@@ -42,20 +59,10 @@ export class SupabaseService {
     }
   }
 
-  async signInWithApple(): Promise<void> {
-    const { error } = await this.supabase.auth.signInWithOAuth({
-      provider: 'apple',
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-    if (error) {
-      console.error('Apple OAuth error:', error.message);
-    }
-  }
-
   async signOut(): Promise<void> {
     await this.supabase.auth.signOut();
+    this.currentUser.set(null);
+    this.profile.set(null);
   }
 
   async getSession() {
@@ -82,6 +89,7 @@ export class SupabaseService {
     }
     const provider = session.user?.app_metadata?.provider as string | null;
     await this.upsertProfile(session.user, provider);
+    await this.getProfile();
   }
 
   private async upsertProfile(user: User, provider: string | null): Promise<void> {
@@ -100,6 +108,44 @@ export class SupabaseService {
 
     if (error) {
       console.warn('Profile upsert skipped — ensure a "profiles" table exists in Supabase:', error.message);
+    } else {
+      this.profile.set(profile);
     }
+  }
+
+  async getProfile(): Promise<Profile | null> {
+    const user = this.currentUser();
+    if (!user) return null;
+
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      console.warn('Error fetching profile:', error.message);
+      return null;
+    }
+
+    this.profile.set(data);
+    return data;
+  }
+
+  async updateProfile(updates: Partial<Profile>): Promise<void> {
+    const user = this.currentUser();
+    if (!user) return;
+
+    const { error } = await this.supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id);
+
+    if (error) {
+      console.error('Error updating profile:', error.message);
+      throw error;
+    }
+
+    await this.getProfile();
   }
 }
