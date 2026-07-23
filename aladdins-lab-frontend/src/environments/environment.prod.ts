@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiBaseUrl: '/api/v1'
+  apiBaseUrl: '/api/v1',
+  supabaseUrl: 'https://yprbpsvjjeytbvwscesv.supabase.co',
+  supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcmJwc3ZqamV5dGJ2d3NjZXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MDk4ODIsImV4cCI6MjA5OTE4NTg4Mn0.LUlOBHqIEdzy_ZpksygWYQUMSwvjZrXqAxcsG8xYoFw'
 };
