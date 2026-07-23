@@ -34,11 +34,22 @@ export class SupabaseService {
         const user = session?.user ?? null;
         this.currentUser.set(user);
         if (user) {
-          this.handleAuthCallback();
+          const provider = user.app_metadata?.provider as string | null;
+          this.upsertProfile(user, provider);
+          this.getProfile();
         }
       } else if (event === 'SIGNED_OUT') {
         this.currentUser.set(null);
         this.profile.set(null);
+      }
+    });
+
+    this.supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        this.currentUser.set(session.user);
+        const provider = session.user.app_metadata?.provider as string | null;
+        this.upsertProfile(session.user, provider);
+        this.getProfile();
       }
     });
   }
@@ -80,16 +91,6 @@ export class SupabaseService {
       return null;
     }
     return data.user;
-  }
-
-  async handleAuthCallback(): Promise<void> {
-    const { data: { session }, error } = await this.supabase.auth.getSession();
-    if (error || !session?.user) {
-      return;
-    }
-    const provider = session.user?.app_metadata?.provider as string | null;
-    await this.upsertProfile(session.user, provider);
-    await this.getProfile();
   }
 
   private async upsertProfile(user: User, provider: string | null): Promise<void> {

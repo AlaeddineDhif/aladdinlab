@@ -99,7 +99,9 @@
               <h3 class="portal-card-title">Enterprise Solutions &amp; R&amp;D</h3>
               <p class="portal-card-desc">Rapid prototyping, embedded systems (IoT/ESP32/STM32), and mechanical automation.</p>
             </div>
-            <button class="cta-btn">Request Consultation</button>
+            @if (!user()) {
+              <button class="cta-btn">Request Consultation</button>
+            }
           </div>
         </div>
       </div>
