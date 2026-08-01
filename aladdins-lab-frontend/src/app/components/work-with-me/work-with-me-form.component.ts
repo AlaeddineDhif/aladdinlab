@@ -112,8 +112,9 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
       width: 100%;
       max-width: min(560px, 90vw);
       background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--card-shadow);
       padding: clamp(24px, 4vw, 48px);
     }
 

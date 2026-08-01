@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-audience-portal',
   standalone: true,
   template: `
-    <section class="portal">
+    <section id="portal" class="portal">
       <div class="container">
         <div class="portal-header">
           <h2 class="portal-title">Explore Aladdin's Lab</h2>
@@ -114,6 +114,7 @@ import { Component } from '@angular/core';
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: clamp(28px, 3vw, 44px);
+      box-shadow: var(--card-shadow);
       transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                   box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                   border-color var(--transition);

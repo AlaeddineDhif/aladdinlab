@@ -152,6 +152,7 @@ import { Component } from '@angular/core';
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: clamp(20px, 2.5vw, 32px);
+      box-shadow: var(--card-shadow);
       transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
     }
 
