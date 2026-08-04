@@ -8,6 +8,7 @@ interface VideoItem {
   tag: string;
   desc: string;
   thumbnail: string;
+  isNew?: boolean;
 }
 
 @Component({
@@ -37,6 +38,9 @@ interface VideoItem {
                     <i class="fa-solid fa-play"></i>
                   </div>
                 </div>
+                @if (video.isNew) {
+                  <span class="new-badge">NEW</span>
+                }
               </div>
 
               <div class="video-body">
@@ -45,7 +49,7 @@ interface VideoItem {
                 <p class="video-card-desc">{{ video.desc }}</p>
 
                 <div class="video-card-action">
-                  <a [href]="video.url" target="_blank" rel="noopener" class="watch-link">
+                  <a [href]="video.url" target="_blank" rel="noopener noreferrer" class="watch-link">
                     Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square"></i>
                   </a>
                 </div>
@@ -192,6 +196,27 @@ interface VideoItem {
       justify-content: center;
       font-size: 1.25rem;
       box-shadow: 0 4px 20px rgba(255, 0, 0, 0.5);
+    }
+
+    .new-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background-color: #2563eb;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.5), 0 2px 8px rgba(37, 99, 235, 0.3);
+      animation: pulse-new 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-new {
+      0%, 100% { box-shadow: 0 0 12px rgba(37, 99, 235, 0.5), 0 2px 8px rgba(37, 99, 235, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.7), 0 2px 12px rgba(37, 99, 235, 0.4); }
     }
 
     .video-body {
@@ -352,6 +377,16 @@ export class VideosSectionComponent {
   activeVideo = signal<VideoItem | null>(null);
 
   videos: VideoItem[] = [
+    {
+      id: 'yJ35H3fqcc0',
+      url: 'https://youtu.be/yJ35H3fqcc0',
+      embedUrl: 'https://www.youtube-nocookie.com/embed/yJ35H3fqcc0?autoplay=1',
+      title: 'Latest Build: Custom 3D Printer Frame & Electronics Setup',
+      tag: 'New',
+      desc: 'A full walkthrough of our latest 3D printer frame build with custom electronics and automation.',
+      thumbnail: 'https://img.youtube.com/vi/yJ35H3fqcc0/maxresdefault.jpg',
+      isNew: true
+    },
     {
       id: 'qYAben1VhDo',
       url: 'https://youtu.be/qYAben1VhDo',

@@ -9,17 +9,17 @@
     </a>
 
     <nav class="nav-links" id="nav-menu">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Home</a>
-      <a routerLink="/" [fragment]="'videos'" class="nav-link">Videos</a>
-      <a routerLink="/" [fragment]="'deals'" class="nav-link">Get Discounts</a>
-      <a routerLink="/work-with-me" routerLinkActive="active" class="nav-link">Work With Me</a>
+      <a routerLink="/" [class.active]="activeSection === 'home'" class="nav-link" (click)="setSection('home')">Home</a>
+      <a routerLink="/" [fragment]="'videos'" [class.active]="activeSection === 'videos'" class="nav-link" (click)="setSection('videos')">Videos</a>
+      <a routerLink="/" [fragment]="'deals'" [class.active]="activeSection === 'deals'" class="nav-link" (click)="setSection('deals')">Get Discounts</a>
+      <a routerLink="/work-with-me" [class.active]="activeSection === 'work-with-me'" class="nav-link" (click)="setSection('work-with-me')">Work With Me</a>
     </nav>
 
     <div class="nav-actions">
       @if (supabase.currentUser()) {
         <div class="user-menu">
           <button class="avatar-btn" (click)="toggleDropdown()" [attr.aria-label]="'User menu'">
-            <img [src]="avatarUrl()" alt="" class="avatar-img" />
+            <img [src]="avatarUrl" alt="" class="avatar-img" />
           </button>
           @if (dropdownOpen()) {
             <div class="dropdown-backdrop" (click)="dropdownOpen.set(false)"></div>
@@ -65,10 +65,10 @@
 
   @if (mobileOpen()) {
     <div class="mobile-menu">
-      <a routerLink="/" (click)="closeMobile()" class="nav-link">Home</a>
-      <a routerLink="/" [fragment]="'videos'" (click)="closeMobile()" class="nav-link">Videos</a>
-      <a routerLink="/" [fragment]="'deals'" (click)="closeMobile()" class="nav-link">Get Discounts</a>
-      <a routerLink="/work-with-me" (click)="closeMobile()" class="nav-link">Work With Me</a>
+      <a routerLink="/" (click)="closeMobile(); setSection('home')" class="nav-link">Home</a>
+      <a routerLink="/" [fragment]="'videos'" (click)="closeMobile(); setSection('videos')" class="nav-link">Videos</a>
+      <a routerLink="/" [fragment]="'deals'" (click)="closeMobile(); setSection('deals')" class="nav-link">Get Discounts</a>
+      <a routerLink="/work-with-me" (click)="closeMobile(); setSection('work-with-me')" class="nav-link">Work With Me</a>
     </div>
   }
 </header>

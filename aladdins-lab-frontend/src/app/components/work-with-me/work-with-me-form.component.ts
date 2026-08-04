@@ -1,13 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgClass, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { InquiryService } from '../../services/inquiry.service';
-import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
 
 @Component({
   selector: 'app-work-with-me-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgFor],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="form-wrapper">
       <div class="form-card">
@@ -19,12 +18,56 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
         @if (submitted()) {
           <div class="success-state">
             <div class="success-icon">&#10003;</div>
-            <h3>Inquiry Submitted</h3>
-            <p>Thank you {{ submittedName }}. I'll get back to you within 48 hours.</p>
+            <h3>Message Sent!</h3>
+            <p>Thanks for reaching out! Your message was sent successfully to contact&#64;aladdinlab.net. We'll respond shortly!</p>
+            <a href="mailto:contact&#64;aladdinlab.net" class="btn btn-primary">Email Us Directly</a>
             <button class="btn btn-outline" (click)="resetForm()">Send Another</button>
           </div>
         } @else {
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body" novalidate>
+            <div class="field">
+              <label class="label">I am contacting as:</label>
+              <select formControlName="userType" class="input" [class.input-error]="userTypeCtrl.invalid && userTypeCtrl.touched" (change)="onUserTypeChange()">
+                <option value="" disabled selected>Select your type</option>
+                <option value="individual">Individual</option>
+                <option value="company">Company / Brand</option>
+              </select>
+              @if (userTypeCtrl.invalid && userTypeCtrl.touched) {
+                <span class="field-error">Please select your user type</span>
+              }
+            </div>
+
+            <div class="field">
+              <label class="label">Inquiry Category:</label>
+              <select formControlName="inquiryType" class="input" [class.input-error]="typeCtrl.invalid && typeCtrl.touched">
+                <option value="" disabled selected>Select a category</option>
+                <option value="Sponsorship & Brand Collaboration">Sponsorship & Brand Collaboration</option>
+                <option value="Custom IoT / Embedded Project">Custom IoT / Embedded Project</option>
+                <option value="3D Printing & Prototyping">3D Printing & Prototyping</option>
+                <option value="General Inquiry / Feedback">General Inquiry / Feedback</option>
+              </select>
+              @if (typeCtrl.invalid && typeCtrl.touched) {
+                <span class="field-error">Please select an inquiry category</span>
+              }
+            </div>
+
+            @if (isCompany()) {
+              <div class="field">
+                <label for="companyName" class="label">Company Name</label>
+                <input
+                  id="companyName"
+                  type="text"
+                  formControlName="companyName"
+                  class="input"
+                  placeholder="Your company name"
+                  [class.input-error]="companyNameCtrl.invalid && companyNameCtrl.touched"
+                />
+                @if (companyNameCtrl.invalid && companyNameCtrl.touched) {
+                  <span class="field-error">Company name is required</span>
+                }
+              </div>
+            }
+
             <div class="field">
               <label for="name" class="label">Full Name</label>
               <input
@@ -59,17 +102,6 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
             </div>
 
             <div class="field">
-              <label class="label">Inquiry Type</label>
-              <select formControlName="inquiryType" class="input" [class.input-error]="typeCtrl.invalid && typeCtrl.touched">
-                <option value="" disabled>Select a category</option>
-                <option *ngFor="let t of inquiryTypes" [value]="t">{{ t }}</option>
-              </select>
-              @if (typeCtrl.invalid && typeCtrl.touched) {
-                <span class="field-error">Please select an inquiry type</span>
-              }
-            </div>
-
-            <div class="field">
               <label class="label">Message</label>
               <textarea
                 formControlName="message"
@@ -94,7 +126,10 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
             </button>
 
             @if (error()) {
-              <div class="error-banner">Something went wrong. Please try again.</div>
+              <div class="error-banner">
+                <p>Something went wrong. Please try again or email us directly:</p>
+                <a href="mailto:contact&#64;aladdinlab.net" class="retry-link">contact&#64;aladdinlab.net</a>
+              </div>
             }
           </form>
         }
@@ -177,14 +212,6 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
       box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
     }
 
-    .select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 36px;
-    }
-
     .textarea {
       resize: vertical;
       min-height: 120px;
@@ -209,6 +236,7 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
       align-items: center;
       justify-content: center;
       gap: 8px;
+      text-decoration: none;
     }
 
     .btn:disabled {
@@ -261,6 +289,14 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
       text-align: center;
     }
 
+    .retry-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
     .success-state {
       text-align: center;
       padding: clamp(16px, 3vw, 32px) 0;
@@ -288,7 +324,7 @@ import { INQUIRY_TYPES } from '../../models/contact-inquiry.model';
     .success-state p {
       color: var(--text-secondary);
       font-size: clamp(0.85rem, 1.3vw, 1rem);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     @media (max-width: 480px) {
@@ -316,23 +352,44 @@ export class WorkWithMeFormComponent {
   private fb = inject(FormBuilder);
   private service = inject(InquiryService);
 
-  inquiryTypes = [...INQUIRY_TYPES];
   submitted = signal(false);
   submitting = signal(false);
   error = signal(false);
-  submittedName = '';
 
   form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(150)]],
     inquiryType: ['', Validators.required],
+    userType: ['', Validators.required],
+    companyName: [''],
     message: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]]
   });
 
   get nameCtrl() { return this.form.controls.name; }
   get emailCtrl() { return this.form.controls.email; }
   get typeCtrl() { return this.form.controls.inquiryType; }
+  get userTypeCtrl() { return this.form.controls.userType; }
+  get companyNameCtrl() { return this.form.controls.companyName; }
   get msgCtrl() { return this.form.controls.message; }
+
+  isCompany = signal(false);
+
+  onUserTypeChange(): void {
+    this.updateCompanyField();
+    this.form.get('companyName')?.reset();
+  }
+
+  private updateCompanyField(): void {
+    const userType = this.form.get('userType')?.value;
+    this.isCompany.set(userType === 'company');
+    const companyNameCtrl = this.form.get('companyName');
+    if (userType === 'company') {
+      companyNameCtrl?.setValidators([Validators.required, Validators.minLength(2), Validators.maxLength(100)]);
+    } else {
+      companyNameCtrl?.clearValidators();
+    }
+    companyNameCtrl?.updateValueAndValidity();
+  }
 
   onSubmit() {
     if (this.form.invalid) {
@@ -343,9 +400,14 @@ export class WorkWithMeFormComponent {
     this.submitting.set(true);
     this.error.set(false);
 
-    this.service.submitInquiry(this.form.getRawValue()).subscribe({
+    const raw = this.form.getRawValue();
+    const inquiry = {
+      ...raw,
+      userType: raw.userType as 'individual' | 'company'
+    };
+
+    this.service.submitInquiry(inquiry).subscribe({
       next: () => {
-        this.submittedName = this.form.value.name ?? '';
         this.submitted.set(true);
         this.submitting.set(false);
       },
@@ -357,7 +419,15 @@ export class WorkWithMeFormComponent {
   }
 
   resetForm() {
-    this.form.reset({ inquiryType: '' });
+    this.form.reset({
+      inquiryType: '',
+      userType: '',
+      companyName: '',
+      name: '',
+      email: '',
+      message: ''
+    });
+    this.isCompany.set(false);
     this.submitted.set(false);
     this.error.set(false);
   }
